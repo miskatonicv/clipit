@@ -1,0 +1,97 @@
+<!DOCTYPE html> 
+<html> 
+	<head> 
+	<title>Hello mPerks</title> 
+	
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css" />
+	<link rel="stylesheet" href="css/coupon.css" />
+	
+	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"></script>	
+	
+	<script type="text/javascript">
+	
+		var serviceUrl = 'https://www2cert.meijer.com/mperksShopperQuery/ShopperQuery.svc/basic';  // CERT/QA
+		
+		function helloMperks () {
+		
+			var soapMessage = 
+				'<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:shop="urn:meijer:mperks/2011/ShopperQuery">' +
+				'<soapenv:Header>' +
+					'<wsse:Security soapenv:mustUnderstand="1" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">' +
+					'<wsse:UsernameToken wsu:Id="UsernameToken-2" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">' +
+					'<wsse:Username>Modiv</wsse:Username>' +
+					'<wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText">CXs37R*jKPla</wsse:Password>' +
+					'<wsse:Nonce EncodingType="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-soap-message-security-1.0#Base64Binary">RNrYQyjgqkqohMzjMAXCgw==</wsse:Nonce>' +
+					'<wsu:Created>2012-07-30T15:10:48.407Z</wsu:Created>' +
+					'</wsse:UsernameToken></wsse:Security>' +
+				'<soapenv:Header>' +
+				'<soapenv:Body>' +
+					'<shop:HelloMperks/>' +
+				'</soapenv:Body>' +
+				'</soapenv:Envelope>';
+				
+			$.ajax({
+				url: serviceUrl,
+				type: "POST",
+				contentType: "text/xml; charset=\"utf-8\"",
+				dataType: "xml",
+				data: soapMessage,
+				success: processSuccess,
+				error: processError				
+			});
+			
+			return false;
+		
+		}
+		
+		function processSuccess(data, status, req) {
+			if(status === "success") {
+				$("#soapResponse").html( req.responseXML );
+			}
+		}
+		
+		function processError(data, status, req) {
+			alert(req.responseText + " " + status);
+		}
+			
+		function printResponse (xmlHttpRequest, status) {
+		
+			//debugger;
+			
+			$("#soapResponse").html( xmlHttpRequest.responseXML );
+		}
+		
+		$(document).bind('pageinit', function() {		
+		
+			$("#hello").bind( "click", function( e, ui ) {
+		
+				//debugger;
+		
+				helloMperks();		
+			});
+		});
+			
+	
+	</script>	
+</head> 
+<body> 
+
+<div data-role="page" id="init">
+
+	<div data-role="header">
+		<h1>Hello mPerks</h1>
+	</div><!-- /header -->
+
+	<div data-role="content">	
+		<a href="#" data-role="button" id="hello">Hello mPerks</a>	
+		<div id="soapResponse"></div>
+	</div><!-- /content -->
+	
+</div>
+
+</body>
+</html>
