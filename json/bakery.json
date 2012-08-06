@@ -1,0 +1,17 @@
+bakery({
+	"header": "Bakery",
+	"coupons": [
+		{ 
+			"imgSrc": 		"images/bakery/bagels.jpg",
+			"discount":	 	"$1.00 Off 2",
+			"desc": 		"Bakery Bagels Special",
+			"endDate":		"07/01/12"
+		},
+		{ 
+			"imgSrc": 		"images/bakery/pretzelroll.jpg",
+			"discount": 	"$0.50 Off 1",
+			"desc": 		"Pretzel Roll 6ct., or Pretzel Hamburger Buns 4 ct. (Found in the Bakery)",
+			"endDate":		"06/23/12"
+		}	
+	]
+});

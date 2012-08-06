@@ -6,218 +6,29 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1"> 
 	
-	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css" />
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.css" />
 	<link rel="stylesheet" href="css/coupon.css" />
 	
 	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
-	<script src="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"></script>	
+	<script src="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.js"></script>	
+	<script src="js/mj-clipit.js"></script>
 	
-	<script type="text/javascript">
-	
-		/*var coupons = {
-			bakery: {
-				header: "Bakery",
-				coupons: [
-					{ 
-						imgSrc: 	"images/bakery/bagels.jpg",
-						discount: 	"$1.00 Off 2",
-						desc: 		"Bakery Bagels Special",
-						endDate:	"07/01/12"
-					},
-					{ 
-						imgSrc: 	"images/bakery/pretzelroll.jpg",
-						discount: 	"$0.50 Off 1",
-						desc: 		"Pretzel Roll 6ct., or Pretzel Hamburger Buns 4 ct. (Found in the Bakery)",
-						endDate:	"06/23/12"
-					}	
-				]
-			},
-			grocery: {
-				header: "Grocery",
-				coupons: [
-					{ 
-						imgSrc: 	"images/grocery/Pop-Tart-Crisp-Straw.gif",
-						discount: 	"SAVE $1.00",
-						desc: 		"on any THREE (3) Kellogg's&reg; Pop-Tarts&reg; toaster pastries and/or Kellogg's&reg;",
-						endDate:	"06/30/12"
-					},
-					{ 
-						imgSrc: 	"images/grocery/OliveOil.jpg",
-						discount: 	"$1.00 Off One",
-						desc: 		"O-live Premium Extra Virgin Olive Oil 25oz",
-						endDate:	"07/15/12"
-					},
-					{ 
-						imgSrc: 	"images/grocery/HormelChunkChicken.jpg",
-						discount: 	"$0.50 Off 2",
-						desc: 		"HORMEL&reg; Chunk Chicken and HORMEL&reg; Cook-Off Series Chili",
-						endDate:	"07/14/12"
-					},
-					{ 
-						imgSrc: 	"images/grocery/HormelCompleats.jpg",
-						discount: 	"$0.50 Off 2",
-						desc: 		"HORMEL&reg; COMPLEATS&reg; Microwave Meals",
-						endDate:	"07/14/12"
-					},
-					{ 
-						imgSrc: 	"images/grocery/Malt-O-Meal.jpg",
-						discount: 	"$2.00 Off 1",
-						desc: 		"NABISCO Multi-Packs 12-15 c",
-						endDate:	"07/14/12"
-					},
-					{ 
-						imgSrc: 	"images/grocery/Nabisco-Multi-Packs.jpg",
-						discount: 	"$1.00 Off 2",
-						desc: 		"ANY Malt-O-Meal Bag Cereal 26-37 oz. Bag the Box! BagTheBox.com",
-						endDate:	"07/01/12"
-					},
-					{ 
-						imgSrc: 	"images/grocery/Nabisco-Snak-Saks-8oz.jpg",
-						discount: 	"$0.50 Off 2",
-						desc: 		"NABISCO Snak Saks 8 Oz, KRAFT Handi-Snacks 5.52-6.5 Oz Or Cheese Nips 10.5-12 Oz",
-						endDate:	"07/01/12"
-					},
-					{ 
-						imgSrc: 	"images/grocery/ThomasBagels.jpg",
-						discount: 	"$1.00 Off 2",
-						desc: 		"Thomas' Bagels 6 Ct/20 Oz",
-						endDate:	"06/23/12"
-					},
-					{ 
-						imgSrc: 	"images/grocery/KikkomanSaucesMarinades.jpg",
-						discount: 	"$1.25 Off",
-						desc: 		"SAVE $1.25 at checkout when you buy any three (3) Kikkoman Sauces and Marinades",
-						endDate:	"07/08/12"
-					},
-					{ 
-						imgSrc: 	"images/grocery/IceMountainWater.jpg",
-						discount: 	"$1.00 Off 3",
-						desc: 		"Ice Mountain Water - Gallons (Spring, Drinking, Distilled, or Flouride)",
-						endDate:	"07/22/12"
-					},
-					{ 
-						imgSrc: 	"images/grocery/ZatarainRicePasta.gif",
-						discount: 	"SAVE $0.50",
-						desc: 		"on any THREE (3) ZATARAIN'S&reg; Rice or Pasta Mixes",
-						endDate:	"09/02/12"
-					},
-					{ 
-						imgSrc: 	"images/grocery/BettyCrockerCookieMix-BisquickMix.jpg",
-						discount: 	"$1.00 Off 2",
-						desc: 		"Any Betty Crocker&reg; Cookie Mix, Warm Delights And Bisquick Mix (2.9-20Oz)",
-						endDate:	"06/30/12"
-					}
-				]
-			}
-		};
-		
-		// concat all coupons into one array
-		var couponsAll = {
-			header: "All Coupons",
-			coupons: coupons.bakery.coupons.concat( coupons.grocery.coupons ) 
-		};*/
-
-		function getMarkUp(categoryName) { 
-			var markup = "<ul id=\"ul-details\">"; 
-			
-			$.ajax({
-				async: false,
-				url: 'json/offers.json',
-				success: function(data) {
-					$.each(data.offers, function(key, value) {				
-						if(value.header === categoryName || categoryName === 'all') {
-								$.each(value.coupons, function(key, value) {
-									console.log(value.desc);
-									markup += "<li id=\"li-details\">" + 						
-										"<div id=\"info\"><a href=\"#\" data-role=\"button\" data-icon=\"info\" data-iconpos=\"notext\" data-theme=\"a\"></a></div>" +
-										"<div id=\"image-block\">" +
-										"<div id=\"coupon-img\"><img src=" + value.imgSrc + " border=\"1\" /></div>" +
-										"</div>" +	
-										"<div id=\"coupon-details\">" + 
-										"<div id=\"coupon-discount\">" + value.discount + "</div>" +
-										"<div id=\"coupon-desc\">" + value.desc + "</div>" +
-										"<div id=\"coupon-date\">offer good thru " + value.endDate + "</div>" +
-										"<div id=\"clip-it-btn\"><a href=\"#\" data-role=\"button\" data-icon=\"plus\" data-theme=\"b\" data-mini=\"true\" data-inline=\"true\">Clip It</a></div>" + 
-										"</div></li><br /><hr />";	
-								});
-							
-						}					
-					});
-				}
-			});
-			
-			markup += "</ul>";
-			
-			return markup; 
-		}
-		
-		// Load data from specific category
-		function showCategory( urlObj, options )
-		{
-			var categoryName = urlObj.hash.replace( /.*category=/, "" ),  // fetch catagory requested
-				categoryHeader = (categoryName === 'all') ? 'All coupons' : categoryName,
-				pageSelector = urlObj.hash.replace( /\?.*$/, "" ),
-				markup = getMarkUp(categoryName);
-
-			// check if category exists. if so, then build category view
-			if ( markup ) {
-
-				var $page = $( pageSelector ),
-
-					$header = $page.children( ":jqmData(role=header)" ),
-
-					$content = $page.children( ":jqmData(role=content)" );			
-
-				$header.find( "h1" ).html( categoryHeader );
-				
-				$content.html( markup );
-				
-				$page.page();
-				
-				$content.find( ":jqmData(role=listview)" ).listview();
-				
-				options.dataUrl = urlObj.href;
-
-				$.mobile.changePage( $page, options );
-				
-				$page.trigger("create");
-			}
-		}
-
-
-		// Listen for any attempts to call changePage().
-		$(document).bind( "pagebeforechange", function( e, data ) {
-
-			if ( typeof data.toPage === "string" ) {
-		
-				var u = $.mobile.path.parseUrl( data.toPage ),
-					re = /^#category-item/;
-					
-				if ( u.hash.search(re) !== -1 ) {
-					
-					showCategory( u, data.options );
-
-					e.preventDefault();
-				}
-			}
-		});
-		
-	</script>	
 </head> 
 <body> 
 
 <div data-role="page" id="init">
 
 	<div data-role="header">
-		<h1>Coupons</h1>
+		<h1>mPerks Offers</h1>
 	</div><!-- /header -->
 
 	<div data-role="content">	
-		<ul data-role="listview" data-inset="true">
-			<li><a href="#category-items?category=all">View All Coupons</a></li>
+		<!--<ul data-role="listview" data-inset="true">
+			<li><a href="#category-items?category=Clipped">Clipped Offers</a></li>
+			<li><a href="#category-items?category=all">All Available Offers</a></li>
 			<li><a href="#category-items?category=Bakery">Bakery</a></li>
 			<li><a href="#category-items?category=Grocery">Grocery</a></li>
-		</ul>		
+		</ul>-->	
 	</div><!-- /content -->
 
 </div><!-- /page init -->

@@ -1,0 +1,14 @@
+categories([
+	{
+		"header": "Clipped"
+	},
+	{
+		"header": "All Available Offers"
+	},
+	{
+		"header": "Bakery"
+	},
+	{
+		"header": "Grocery"
+	}
+]);

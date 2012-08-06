@@ -14,15 +14,13 @@
 	
 	<script type="text/javascript">
 	
-		var serviceUrl = 'https://www2cert.meijer.com/mperksShopperQuery/ShopperQuery.svc/basic?wsdl';  // CERT/QA
-		
-		var url = 'http://wsf.cdyne.com/WeatherWS/Weather.asmx';  // weather test
+		var serviceUrl = 'https://www2cert.meijer.com/mperksShopperQuery/ShopperQuery.svc/basic';  // CERT/QA
 		
 		function helloMperks () {
 		
 			//debugger;
 		
-			/*var soapMessage = 
+			var soapMessage = 
 				'<?xml version=\"1.0\" encoding=\"utf-8\"?>' +
 				'<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:shop="urn:meijer:mperks/2011/ShopperQuery">' +
 				'<soapenv:Header>' +
@@ -37,22 +35,14 @@
 				'<soapenv:Body>' +
 					'<shop:HelloMperks/>' +
 				'</soapenv:Body>' +
-				'</soapenv:Envelope>';*/
-				
-			var weather = 
-				'<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:weat="http://ws.cdyne.com/WeatherWS/">' +
-				   '<soap:Header/>' +
-				   '<soap:Body>' +
-					  '<weat:GetWeatherInformation/>' +
-				   '</soap:Body>' +
-				'</soap:Envelope>';
+				'</soapenv:Envelope>';
 				
 			$.ajax({
-				url: url,
+				url: serviceUrl,
 				type: "POST",
 				contentType: "text/xml; charset=\"utf-8\"",
 				dataType: "xml",
-				data: weather, //soapMessage,
+				data: soapMessage,
 				success: processSuccess,
 				error: processError				
 			});

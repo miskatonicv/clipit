@@ -1,0 +1,188 @@
+/* Meijer Clipped Offers */
+
+
+// Fetch Catagories from MTS
+function GetCategories() {
+	
+	var categories = [];
+	
+	$.ajax({
+		async: false,
+		url: 'json/offers.json',
+		success: function(data) {
+			$.each(data.offers, function(key, value) {				
+				categories.push({ 
+					header: value.header
+				});
+			});
+		}
+	});
+	
+	return categories;
+	
+}
+
+// Show Category List 
+function ShowCategories() {
+	
+	var categories = GetCategories();
+	
+	if ( categories ) {
+		
+		var $page = $( "#init" ),
+
+			$content = $page.children( ":jqmData(role=content)" ),
+			
+			markup = '<ul data-role="listview" data-inset="true"><li><a href="#category-items?category=all">All Available Offers</a></li>'; 	
+		
+		$.each( categories, function(key, value) {
+		
+			//debugger;
+		
+			markup += '<li><a href="#category-items?category=' + value.header + '">' + value.header + '</a></li>';
+		
+		});
+		
+		markup += '</ul>';
+		
+		$content.html( markup );
+		
+		$page.page();
+		
+		$content.find( ":jqmData(role=listview)" ).listview();
+
+		//$.mobile.changePage( $page );
+		
+		$page.trigger("create");
+	}
+}
+
+// GetOffersByCategory
+function GetOffersByCategory( categoryName ) {
+	
+	var offersByCategory = [],
+	
+		pushCoupons = function ( coupons ) {
+			$.each( coupons, function(key, value) {
+				offersByCategory.push( value );
+			});
+		};
+	
+	$.ajax({
+		async: false,
+		url: 'json/offers.json',
+		success: function(data) {
+			$.each(data.offers, function(key, value) {	
+				
+				if(value.header === 'Clipped') {
+					pushCoupons( value.coupons );
+				} else {
+					if(value.header === categoryName || categoryName === 'all') {
+						pushCoupons( value.coupons );
+					} 
+				}
+				
+			});
+		}
+	});
+	
+	return offersByCategory;
+}
+
+// Generate MarkUp from Json Data
+function GetMarkUp( categoryName ) { 
+
+	var offersByCategory = GetOffersByCategory( categoryName ),	
+		markup = '<ul id="ul-details">'; 
+	
+	$.each( offersByCategory, function(key, value) {
+		//debugger;
+		
+		markup += 
+			'<li id="li-details">' + 	
+				'<div id="info"><a href="#" data-role="button" data-icon="info" data-iconpos="notext" data-theme="a"></a></div>' +
+				'<div class="ui-grid-a">' +
+					'<div class="ui-block-a">' +
+						'<div id="coupon-img"><img src=' + value.imgSrc + ' border="1" /></div>' +
+					'</div>' +
+					'<div class="ui-block-b">' +
+						'<div id="coupon-details">' + 
+							'<div id="coupon-discount">' + value.discount + '</div>' +
+							'<div id="coupon-desc">' + value.desc + '</div>' +
+							'<div id="coupon-date">offer good thru ' + value.endDate + '</div>' +
+							'<div id="clip-it-btn"><a href="#" data-role="button" data-icon="plus" data-theme="b" data-mini="true" data-inline="true">Clip It</a></div>' +
+						'</div>' +
+					'</div>' +
+			'</div></li><hr />';
+			
+		
+	});
+	
+	markup += '</ul>';
+	
+	return markup; 
+}
+
+// Load data from specific category
+function ShowOffers( urlObj, options ) {
+
+	var categoryName = urlObj.hash.replace( /.*category=/, "" ),  // fetch catagory requested
+		categoryHeader = (categoryName === 'all') ? 'All Available Offers' : categoryName,
+		pageSelector = urlObj.hash.replace( /\?.*$/, "" ),
+		markup = GetMarkUp(categoryName);
+		
+	//debugger;	
+
+	// check if category exists. if so, then build category view
+	if ( markup ) {
+
+		var $page = $( pageSelector ),
+
+			$header = $page.children( ":jqmData(role=header)" ),
+
+			$content = $page.children( ":jqmData(role=content)" );			
+
+		$header.find( "h1" ).html( categoryHeader );
+		
+		$content.html( markup );
+		
+		$page.page();
+		
+		$content.find( ":jqmData(role=listview)" ).listview();
+		
+		options.dataUrl = urlObj.href;
+
+		$.mobile.changePage( $page, options );
+		
+		$page.trigger("create");
+	}
+}
+
+// Listen for any attempts to call changePage().
+$(document).bind( "pagebeforechange", function( e, data ) {
+	
+	if ( typeof data.toPage === "string" ) {
+
+		var u = $.mobile.path.parseUrl( data.toPage ),
+			re = /^#category-item/;
+			
+		if ( u.hash.search(re) !== -1 ) {
+			
+			ShowOffers( u, data.options );
+
+			e.preventDefault();
+		} 
+		
+	}
+	
+});
+
+$(document).live( "pageinit", function(e) {
+
+	//debugger;
+	
+	ShowCategories();
+
+	e.preventDefault();
+	
+});
