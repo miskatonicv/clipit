@@ -94,10 +94,8 @@ $(document).bind( "pagebeforechange", function( e, data ) {
 			
 		if ( u.hash.search(re) !== -1 ) {
 			
-			//debugger;
-			
-			var oc = new offersController();
-			oc.update( oc, u, data.options );
+			var oc = new offersController(u, data.options);
+			oc.update( oc );
 			
 			//var pm = new ProxyMrg( window.location.search );
 			
