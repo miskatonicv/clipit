@@ -1,14 +1,5 @@
-categories([
-	{
-		"header": "Clipped"
-	},
-	{
-		"header": "All Available Offers"
-	},
-	{
-		"header": "Bakery"
-	},
-	{
-		"header": "Grocery"
-	}
+category([
+	{"categoryName":"ELECTRONICS & PHOTO","categoryId":"L5-000019"},
+	{"categoryName":"SPORTING GOODS","categoryId":"L5-000028"},
+	{"categoryName":"HEALTH CARE","categoryId":"L5-000002"}
 ]);

@@ -1,0 +1,9 @@
+L5-000028({
+	"categoryId":"L5-000002",
+	"categoryName":"HEALTH CARE",
+	"mediaForCategory":[
+		{"offerId":"5013927","description":"Drugstore Vitamin","consumerInstructions":"Consumer: Only one coupon per transaction. Void where prohibited.","amountOffText":"$10.00 off","imageName":"13_1245.jpg","imageUrl":"http://www4.meijer.com/DigitalCoupon/SpecialSizes/vitamin.jpg"},
+		{"offerId":"5013928","description":"Meijer Trees","consumerInstructions":"Consumer: Only one coupon per transaction. Void where prohibited.","amountOffText":"$.75 off","imageName":"13_1247.jpg","imageUrl":"http://www4.meijer.com/DigitalCoupon/SpecialSizes/tree.jpg"},
+		{"offerId":"5013929","description":"Legend of Zelda: Twilight Princess","consumerInstructions":"Consumer: Only one coupon per transaction. Void where prohibited.","amountOffText":"$14.50 off","imageName":"13_1248.jpg","imageUrl":"http://www4.meijer.com/DigitalCoupon/SpecialSizes/zelda.jpg"}
+	]
+});
