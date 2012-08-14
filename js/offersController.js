@@ -1,13 +1,38 @@
 
-var offersController = function(  ) {
+var offersController = function( urlObj, options ) {
 	
-	this.proxyMgr = new ProxyMgr( window.location.search );	
+	this._proxyMgr = new ProxyMgr( window.location.search );	
+	
+	this._urlObj = urlObj;
+	
+	this._options = options;
+	
+	this._pageSelector = this._urlObj.hash.replace( /\?.*$/, "" );
+	
+	this._page = $( this._pageSelector );
+	
+	this._header = this._page.children( ":jqmData(role=header)" );
+	
+	this._content = this._page.children( ":jqmData(role=content)" );			
+
 
 };
 
 offersController.prototype = {
 
-	updateMarkup: function ( data, status, req, pageSelector, urlObj, options ) {
+	loadNewPage: function() {
+	
+		oc._page.page();
+			
+		oc._options.dataUrl = oc._urlObj.href;
+
+		$.mobile.changePage( oc._page, oc._options );
+		
+		oc._page.trigger("create");
+	
+	},
+
+	displaySuccess: function ( oc, data, textStatus, jqXHR ) {
 			
 		//debugger;
 		
@@ -40,53 +65,35 @@ offersController.prototype = {
 
 		if( markup ) {
 
-			var $page = $( "#offers" ),
-
-				$header = $page.children( ":jqmData(role=header)" ),
-
-				$content = $page.children( ":jqmData(role=content)" );			
-
-			$header.find( "h1" ).html( data.categoryName );
+			oc._header.find( "h1" ).html( data.categoryName );
 			
-			$content.html( markup );
+			oc._content.html( markup );
 			
-			$page.page();
-			
-			$content.find( ":jqmData(role=listview)" ).listview();
-			
-			//debugger;
-			
-			options.dataUrl = urlObj.href;
-
-			$.mobile.changePage( $page, options );
-			
-			$page.trigger("create");
+			oc.loadNewPage( oc );
 		}
 	},
 	
-	update: function( oc, urlObj, options ) {
+	displayError: function(jqXHR, textStatus, errorThrown) {
+	
+		debugger;	
+	
+	},
+	
+	update: function( oc ) {
 		
-		var $categoryId = urlObj.hash.replace( /.*categoryId=/, "" ),  // fetch catagory requested
-			pageSelector = urlObj.hash.replace( /\?.*$/, "" ),
-			$callback = $categoryId.toLowerCase().replace(/-\s/g, ""),
-			url = this.proxyMgr.build_url( 'category', $categoryId );
+		var categoryId = oc._urlObj.hash.replace( /.*categoryId=/, "" ),  // fetch catagory requested
+			url = this.proxyMgr.build_url( 'category', categoryId );
 			
-			
-
-		//debugger;
-		
 		$.ajax({
 			type: 'GET',
 			url: url,
 			dataType: 'jsonp',
 			jsonpCallback: 'callback',
-			success: function(data, status, req) {
-			//debugger;
-				oc.updateMarkup( data, status, req, pageSelector, urlObj, options );
+			success: function(data, textStatus, jqXHR) {
+				oc.displaySuccess( oc, data, textStatus, jqXHR );
 			},
-			error: function (data, status, req) {
-			debugger;
-				alert(req.responseText + " " + status);
+			error: function (jqXHR, textStatus, errorThrown) {			
+				oc.displayError( oc, jqXHR, textStatus, errorThrown); 
 			}			
 		});	
 				
